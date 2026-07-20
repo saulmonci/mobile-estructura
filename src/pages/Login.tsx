@@ -43,18 +43,22 @@ const Login: React.FC = () => {
       
       if (res.data.success) {
         const { token, user } = res.data.data;
-        setAuth(token, user);
         
         // Fetch catalogs immediately for offline use
-        const catRes = await api.get('/catalogos', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
-        if (catRes.data.success) {
-          setCatalogos(catRes.data.data);
+        try {
+          const catRes = await api.get('/catalogos', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (catRes.data.success) {
+            setCatalogos(catRes.data.data);
+          }
+        } catch (catErr) {
+          console.error("Error fetching catalogs", catErr);
         }
         
-        history.push('/dashboard');
+        // Al setear Auth, App.tsx automáticamente hace un <Redirect to="/dashboard">.
+        // Hacerlo al final evita que el componente se desmonte antes de tiempo y previene la pantalla en blanco por doble navegación.
+        setAuth(token, user);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error de conexión. Revisa tu internet.');
