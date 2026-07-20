@@ -2,22 +2,55 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import localforage from 'localforage';
 
+export interface Promovido {
+  local_id: string;
+  status: string;
+  nombre?: string;
+  apellidos?: string;
+  clave_elector?: string;
+  curp?: string;
+  calle?: string;
+  numero?: string;
+  colonia?: string;
+  codigo_postal?: string;
+  telefono?: string;
+  state_id?: string | number;
+  municipality_id?: string | number;
+  demarcacion_id?: string | number;
+  seccion_electoral?: string | number;
+  promotor_id?: string | number;
+  presidente_id?: string | number;
+  ine_frente?: string | null;
+  ine_reverso?: string | null;
+  foto?: string | null;
+  [key: string]: any;
+}
+
+interface PromovidosState {
+  promovidos: Promovido[];
+  addPromovido: (promovido: Omit<Promovido, 'local_id' | 'status'>) => void;
+  updatePromovido: (local_id: string, updatedData: Partial<Promovido>) => void;
+  removePromovido: (local_id: string) => void;
+  removeSynced: (synced_ids: string[]) => void;
+  clearPromovidos: () => void;
+}
+
 const storage = {
-  getItem: async (name) => {
+  getItem: async (name: string) => {
     const value = await localforage.getItem(name);
-    return value ? JSON.parse(value) : null;
+    return value ? JSON.parse(value as string) : null;
   },
-  setItem: async (name, value) => {
+  setItem: async (name: string, value: any) => {
     await localforage.setItem(name, JSON.stringify(value));
   },
-  removeItem: async (name) => {
+  removeItem: async (name: string) => {
     await localforage.removeItem(name);
   },
 };
 
-const usePromovidosStore = create(
+const usePromovidosStore = create<PromovidosState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       promovidos: [],
       
       addPromovido: (promovido) => set((state) => ({
@@ -25,7 +58,7 @@ const usePromovidosStore = create(
           ...promovido, 
           local_id: Date.now().toString(), 
           status: 'pending_sync' 
-        }]
+        } as Promovido]
       })),
       
       updatePromovido: (local_id, updatedData) => set((state) => ({

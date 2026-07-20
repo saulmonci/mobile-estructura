@@ -18,20 +18,27 @@
     "@capacitor/network": "^8.0.1",
     "@capacitor/preferences": "^8.0.1",
     "@ionic/pwa-elements": "^3.4.0",
+    "@ionic/react": "^8.8.14",
+    "@ionic/react-router": "^8.8.14",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.18.1",
+    "ionicons": "^8.0.13",
     "localforage": "^1.10.0",
     "lucide-react": "^1.25.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.1",
+    "react-hook-form": "^7.82.0",
+    "react-router-dom": "^5.3.4",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.6.8",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "oxlint": "^1.71.0",
+    "typescript": "^7.0.2",
     "vite": "^8.1.1"
   }
 }

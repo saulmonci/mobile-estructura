@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import useAuthStore from "../store/useAuthStore";
 
 import { Capacitor } from "@capacitor/core";
@@ -22,9 +22,9 @@ const api = axios.create({
   // withCredentials: true // Uncomment if using cookie-based Sanctum, but we use Token-based
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = useAuthStore.getState().token;
-  if (token) {
+  if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
