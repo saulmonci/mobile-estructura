@@ -24,7 +24,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/">
-            {token ? <Redirect to="/dashboard" /> : <Login />}
+            <Login />
           </Route>
           
           <Route exact path="/dashboard">

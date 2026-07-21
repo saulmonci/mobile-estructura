@@ -377,16 +377,13 @@ const CaptureForm: React.FC = () => {
               control={control}
               render={({ field }) => (
                 <IonItem>
-                  <IonSelect 
-                    label="Demarcación (Opcional)" 
-                    labelPlacement="floating"
-                    value={field.value} 
-                    onIonChange={e => field.onChange(e.detail.value)}
-                  >
-                    {catalogos?.demarcaciones?.filter((d: any) => !municipality_id || d.municipality_id == municipality_id).map((d: any) => (
-                      <IonSelectOption key={d.id} value={d.id}>{d.name}</IonSelectOption>
-                    ))}
-                  </IonSelect>
+                  <IonInput 
+                    label="Demarcación*" 
+                    labelPlacement="floating" 
+                    value={catalogos?.demarcaciones?.find((d: any) => d.id == field.value)?.nombre || catalogos?.demarcaciones?.find((d: any) => d.id == field.value)?.name || user?.demarcacion?.nombre || field.value || 'No asignada al promotor'} 
+                    readonly={true}
+                    style={{ color: '#64748b' }}
+                  />
                 </IonItem>
               )}
             />

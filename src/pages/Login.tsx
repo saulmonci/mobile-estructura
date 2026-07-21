@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { 
@@ -25,7 +25,13 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   
   const history = useHistory();
-  const { setAuth, setCatalogos } = useAuthStore();
+  const { setAuth, setCatalogos, token } = useAuthStore();
+
+  useEffect(() => {
+    if (token) {
+      history.replace('/dashboard');
+    }
+  }, [token, history]);
   
   const { control, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
@@ -44,21 +50,18 @@ const Login: React.FC = () => {
       if (res.data.success) {
         const { token, user } = res.data.data;
         
+        // Set auth first so the axios interceptor picks up the token for subsequent requests
+        setAuth(token, user);
+
         // Fetch catalogs immediately for offline use
         try {
-          const catRes = await api.get('/catalogos', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const catRes = await api.get('/catalogos');
           if (catRes.data.success) {
             setCatalogos(catRes.data.data);
           }
         } catch (catErr) {
           console.error("Error fetching catalogs", catErr);
         }
-        
-        // Al setear Auth, App.tsx automáticamente hace un <Redirect to="/dashboard">.
-        // Hacerlo al final evita que el componente se desmonte antes de tiempo y previene la pantalla en blanco por doble navegación.
-        setAuth(token, user);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error de conexión. Revisa tu internet.');
