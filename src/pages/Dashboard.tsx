@@ -45,6 +45,7 @@ const Dashboard: React.FC = () => {
   const [syncing, setSyncing] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [showConfirmDelete, setShowConfirmDelete] = useState<string | null>(null);
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
   useEffect(() => {
     Network.getStatus().then(status => setIsOnline(status.connected));
@@ -58,10 +59,7 @@ const Dashboard: React.FC = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    history.push('/');
-  };
+
 
   const syncData = async () => {
     if (!isOnline) {
@@ -106,7 +104,7 @@ const Dashboard: React.FC = () => {
         <IonToolbar>
           <IonTitle>Hola, {user?.name?.split(' ')[0]}</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={handleLogout}>
+            <IonButton onClick={() => setShowConfirmLogout(true)} disabled={!isOnline}>
               <IonIcon slot="icon-only" icon={logOutOutline} />
             </IonButton>
           </IonButtons>
@@ -239,6 +237,29 @@ const Dashboard: React.FC = () => {
             }
           ]}
           onDidDismiss={() => setShowConfirmDelete(null)}
+        />
+
+        <IonAlert
+          isOpen={showConfirmLogout}
+          header={'¿Cerrar Sesión?'}
+          message={'¿Estás seguro de que deseas cerrar sesión? Necesitarás internet para volver a entrar.'}
+          buttons={[
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              handler: () => setShowConfirmLogout(false)
+            },
+            {
+              text: 'Cerrar Sesión',
+              role: 'destructive',
+              handler: () => {
+                setShowConfirmLogout(false);
+                logout();
+                history.push('/');
+              }
+            }
+          ]}
+          onDidDismiss={() => setShowConfirmLogout(false)}
         />
 
       </IonContent>
