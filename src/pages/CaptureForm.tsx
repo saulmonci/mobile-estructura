@@ -59,6 +59,7 @@ const CaptureForm: React.FC = () => {
   });
 
   const municipality_id = watch('municipality_id');
+  const demarcacion_id = watch('demarcacion_id');
 
   const [fotos, setFotos] = useState({
     ine_frente: editData?.ine_frente || null as string | null,
@@ -141,7 +142,9 @@ const CaptureForm: React.FC = () => {
             deducedMuni = seccionEncontrada.municipality_id;
             matchedSeccion = seccionEncontrada.seccion || seccionEncontrada.numero;
             
-            if (!deducedDemarcacion && catalogos?.demarcaciones) {
+            if (!deducedDemarcacion && seccionEncontrada.demarcacion_id) {
+               deducedDemarcacion = seccionEncontrada.demarcacion_id;
+            } else if (!deducedDemarcacion && catalogos?.demarcaciones) {
                const posiblesDemarcaciones = catalogos.demarcaciones.filter((d: any) => d.municipality_id == deducedMuni);
                if (posiblesDemarcaciones.length === 1) {
                   deducedDemarcacion = posiblesDemarcaciones[0].id;
@@ -400,7 +403,7 @@ const CaptureForm: React.FC = () => {
                     value={field.value} 
                     onIonChange={e => field.onChange(e.detail.value)}
                   >
-                    {catalogos?.secciones?.filter((s: any) => !municipality_id || s.municipality_id == municipality_id).map((s: any) => (
+                    {catalogos?.secciones?.filter((s: any) => !demarcacion_id || s.demarcacion_id == demarcacion_id).map((s: any) => (
                       <IonSelectOption key={s.seccion} value={s.seccion}>{s.seccion}</IonSelectOption>
                     ))}
                   </IonSelect>
