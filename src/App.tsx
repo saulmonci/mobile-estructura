@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      <IonReactRouter>
+      <IonReactRouter basename="/app-promotores">
         <IonRouterOutlet>
           <Route exact path="/">
             <Login />

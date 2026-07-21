@@ -4,6 +4,7 @@ import useAuthStore from "../store/useAuthStore";
 import { Capacitor } from "@capacitor/core";
 
 const isNative = Capacitor.isNativePlatform();
+//@ts-ignore
 const isEnv = import.meta.env.MODE;
 
 // Si está en el celular (Android/iOS) o en producción web -> usa el servidor remoto.
@@ -25,8 +26,8 @@ const api = axios.create({
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = useAuthStore.getState().token;
   if (token && config.headers) {
-    if (typeof config.headers.set === 'function') {
-      config.headers.set('Authorization', `Bearer ${token}`);
+    if (typeof config.headers.set === "function") {
+      config.headers.set("Authorization", `Bearer ${token}`);
     } else {
       config.headers.Authorization = `Bearer ${token}`;
     }
