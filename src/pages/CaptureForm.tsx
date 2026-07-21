@@ -280,18 +280,20 @@ const CaptureForm: React.FC = () => {
             <Controller
               name="clave_elector"
               control={control}
+              rules={{ required: true }}
               render={({ field }) => (
                 <IonItem>
-                  <IonInput label="Clave de Elector" labelPlacement="floating" value={field.value} onIonChange={e => field.onChange(e.detail.value)} />
+                  <IonInput label="Clave de Elector*" labelPlacement="floating" required value={field.value} onIonChange={e => field.onChange(e.detail.value)} />
                 </IonItem>
               )}
             />
             <Controller
               name="curp"
               control={control}
+              rules={{ required: true }}
               render={({ field }) => (
                 <IonItem>
-                  <IonInput label="CURP" labelPlacement="floating" value={field.value} onIonChange={e => field.onChange(e.detail.value)} />
+                  <IonInput label="CURP*" labelPlacement="floating" required value={field.value} onIonChange={e => field.onChange(e.detail.value)} />
                 </IonItem>
               )}
             />
